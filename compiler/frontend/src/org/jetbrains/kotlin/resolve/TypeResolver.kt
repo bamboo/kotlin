@@ -162,7 +162,7 @@ class TypeResolver(
                 if (classifierDescriptor == null) {
                     val arguments = resolveTypeProjections(
                             c, ErrorUtils.createErrorType("No type").constructor, qualifierResolutionResults.allProjections)
-                    result = type(ErrorUtils.createErrorTypeWithArguments(type.getDebugText(), arguments))
+                    result = type(ErrorUtils.createErrorTypeWithArguments(type.getDebugText(), arguments, null))
                     return
                 }
 
@@ -347,12 +347,13 @@ class TypeResolver(
         }
 
         if (ErrorUtils.isError(classDescriptor)) {
-            return createErrorTypeAndResolveArguments(c, projectionFromAllQualifierParts, "[Error type: $typeConstructor]")
+            return createErrorTypeAndResolveArguments(c, projectionFromAllQualifierParts, null, "[Error type: $typeConstructor]")
         }
 
         val collectedArgumentAsTypeProjections =
                 collectArgumentsForClassTypeConstructor(c, classDescriptor, qualifierResolutionResult.qualifierParts)
-                ?: return createErrorTypeAndResolveArguments(c, projectionFromAllQualifierParts, typeConstructor.toString())
+                ?: return createErrorTypeAndResolveArguments(
+                        c, projectionFromAllQualifierParts, classDescriptor, typeConstructor.toString())
 
         assert(collectedArgumentAsTypeProjections.size <= parameters.size) {
             "Collected arguments count should be not greater then parameters count," +
@@ -499,15 +500,18 @@ class TypeResolver(
     private fun resolveTypeProjectionsWithErrorConstructor(
             c: TypeResolutionContext,
             argumentElements: List<KtTypeProjection>,
+            classDescriptor: ClassDescriptor?,
             message: String = "Error type for resolving type projections"
-    ) = resolveTypeProjections(c, ErrorUtils.createErrorTypeConstructor(message), argumentElements)
+    ) = resolveTypeProjections(c, ErrorUtils.createErrorTypeConstructor(message, classDescriptor), argumentElements)
 
     private fun createErrorTypeAndResolveArguments(
             c: TypeResolutionContext,
             argumentElements: List<KtTypeProjection>,
+            classDescriptor: ClassDescriptor? = null,
             message: String = ""
     ): PossiblyBareType
-        = type(ErrorUtils.createErrorTypeWithArguments(message, resolveTypeProjectionsWithErrorConstructor(c, argumentElements)))
+        = type(ErrorUtils.createErrorTypeWithArguments(
+            message, resolveTypeProjectionsWithErrorConstructor(c, argumentElements, classDescriptor), classDescriptor))
 
     // In cases like
     // class Outer<F> {

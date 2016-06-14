@@ -375,7 +375,7 @@ public class ErrorUtils {
 
     @NotNull
     public static KotlinType createErrorType(@NotNull String debugMessage) {
-        return createErrorTypeWithArguments(debugMessage, Collections.<TypeProjection>emptyList());
+        return createErrorTypeWithArguments(debugMessage, Collections.<TypeProjection>emptyList(), null);
     }
 
     @NotNull
@@ -389,13 +389,18 @@ public class ErrorUtils {
     }
 
     @NotNull
-    public static KotlinType createErrorTypeWithArguments(@NotNull String debugMessage, @NotNull List<TypeProjection> arguments) {
-        return new ErrorTypeImpl(createErrorTypeConstructor(debugMessage), createErrorScope(debugMessage), arguments);
+    public static KotlinType createErrorTypeWithArguments(
+            @NotNull String debugMessage, 
+            @NotNull List<TypeProjection> arguments,
+            @Nullable ClassDescriptor errorClassDescriptor
+    ) {
+        return new ErrorTypeImpl(createErrorTypeConstructor(debugMessage, errorClassDescriptor), createErrorScope(debugMessage), arguments);
     }
 
     @NotNull
-    public static TypeConstructor createErrorTypeConstructor(@NotNull String debugMessage) {
-        return createErrorTypeConstructorWithCustomDebugName("[ERROR : " + debugMessage + "]", ERROR_CLASS);
+    public static TypeConstructor createErrorTypeConstructor(@NotNull String debugMessage, @Nullable ClassDescriptor errorClassDescriptor) {
+        ClassDescriptor classDescriptor = (errorClassDescriptor != null) ? errorClassDescriptor : ERROR_CLASS;
+        return createErrorTypeConstructorWithCustomDebugName("[ERROR : " + debugMessage + "]", classDescriptor);
     }
 
     @NotNull
@@ -405,7 +410,7 @@ public class ErrorUtils {
 
     @NotNull
     private static TypeConstructor createErrorTypeConstructorWithCustomDebugName(
-            @NotNull final String debugName, @NotNull final ErrorClassDescriptor errorClass
+            @NotNull final String debugName, @NotNull final ClassDescriptor errorClass
     ) {
         return new TypeConstructor() {
             @NotNull

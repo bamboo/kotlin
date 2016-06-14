@@ -74,7 +74,7 @@ private fun KotlinType.buildPossiblyInnerType(classDescriptor: ClassDescriptor?,
     if (classDescriptor == null || ErrorUtils.isError(classDescriptor)) return null
 
     val toIndex = classDescriptor.declaredTypeParameters.size + index
-    if (!classDescriptor.isInner) {
+    if (!classDescriptor.isInner && !this.isError) {
         assert(toIndex == arguments.size || DescriptorUtils.isLocal(classDescriptor)) {
             "${arguments.size - toIndex} trailing arguments were found in $this type"
         }

@@ -115,7 +115,7 @@ class LazyJavaTypeResolver(
                 }
                 is JavaTypeParameter -> {
                     typeParameterResolver.resolveTypeParameter(classifier)?.typeConstructor
-                        ?: ErrorUtils.createErrorTypeConstructor("Unresolved Java type parameter: " + javaType.presentableText)
+                        ?: ErrorUtils.createErrorTypeConstructor("Unresolved Java type parameter: " + javaType.presentableText, null)
                 }
                 else -> throw IllegalStateException("Unknown classifier kind: $classifier")
             }
