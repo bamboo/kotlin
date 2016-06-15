@@ -40,6 +40,11 @@ public interface MatchGroupCollection : Collection<MatchGroup?> {
     // TODO: Provide get(name: String) on JVM 7+
 }
 
+
+public interface MatchNamedGroupCollection : MatchGroupCollection {
+    public operator fun get(name: String): MatchGroup?
+}
+
 /**
  * Represents the results from a single regular expression match.
  */
