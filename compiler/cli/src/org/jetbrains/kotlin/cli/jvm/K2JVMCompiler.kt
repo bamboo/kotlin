@@ -62,7 +62,12 @@ class K2JVMCompiler : CLICompiler<K2JVMCompilerArguments>() {
 
         try {
             if (!arguments.noJdk) {
-                configuration.addJvmClasspathRoots(PathUtil.getJdkClassesRoots())
+                if (arguments.jdkHome != null) {
+                    configuration.addJvmClasspathRoots(PathUtil.getJdkClassesRoots(File(arguments.jdkHome)))
+                }
+                else {
+                    configuration.addJvmClasspathRoots(PathUtil.getJdkClassesRoots())
+                }
             }
         }
         catch (t: Throwable) {
