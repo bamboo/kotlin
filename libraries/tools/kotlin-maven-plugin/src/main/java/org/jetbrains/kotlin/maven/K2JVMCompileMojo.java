@@ -61,6 +61,9 @@ public class K2JVMCompileMojo extends KotlinCompileMojoBase<K2JVMCompilerArgumen
     @Parameter(defaultValue = "${project.artifactId}-test", required = true, readonly = true)
     protected String testModuleName;
 
+    @Parameter(required = false, readonly = false)
+    protected String jdkHome;
+
     @NotNull
     @Override
     protected K2JVMCompiler createCompiler() {
@@ -101,6 +104,11 @@ public class K2JVMCompileMojo extends KotlinCompileMojoBase<K2JVMCompilerArgumen
 
         if (arguments.noOptimize) {
             getLog().info("Optimization is turned off");
+        }
+
+        if (jdkHome != null) {
+            getLog().debug("JDK home is " + jdkHome);
+            arguments.jdkHome = jdkHome;
         }
     }
 }
