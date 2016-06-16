@@ -79,6 +79,8 @@
 
         <module>tools/runtime</module>
         <module>stdlib</module>
+        <module>stdlib/jdk7</module>
+        <module>stdlib/jdk8</module>
         <module>tools/kotlin-reflect</module>
         <module>tools/kotlin-osgi-bundle</module>
 

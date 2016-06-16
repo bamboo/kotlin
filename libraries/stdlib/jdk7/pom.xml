@@ -63,7 +63,7 @@
                 <version>${project.version}</version>
 
                  <configuration>
-
+                     <jdkHome>${env.JDK_17}</jdkHome>
                      <args>
                          <arg>-Xallow-kotlin-package</arg>
                      </args>
