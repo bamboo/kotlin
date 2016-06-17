@@ -61,7 +61,7 @@ public class K2JVMCompileMojo extends KotlinCompileMojoBase<K2JVMCompilerArgumen
     @Parameter(defaultValue = "${project.artifactId}-test", required = true, readonly = true)
     protected String testModuleName;
 
-    @Parameter(required = false, readonly = false)
+    @Parameter(property = "kotlin.compiler.jdkHome", required = false, readonly = false)
     protected String jdkHome;
 
     @NotNull
@@ -107,7 +107,7 @@ public class K2JVMCompileMojo extends KotlinCompileMojoBase<K2JVMCompilerArgumen
         }
 
         if (jdkHome != null) {
-            getLog().debug("JDK home is " + jdkHome);
+            getLog().info("Overriding JDK home path to: " + jdkHome);
             arguments.jdkHome = jdkHome;
         }
     }
